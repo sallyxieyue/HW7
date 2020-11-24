@@ -5,6 +5,7 @@ For my project, I will merge my simulated birth records data 'births_s' and poll
  * 'raw_data' folder contains all the raw data.
  * 'merged_data' folder contains the merged data.
  * 'R' folder contains R codes.
+ * 'output' folder will contain the generated report.
  * 'makefile' contains all make rules for project.
  * 'Dockerfile' contains all docker rules for project.
 
