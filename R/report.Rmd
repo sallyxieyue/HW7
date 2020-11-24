@@ -1,0 +1,62 @@
+---
+title: "Report"
+author: "Yue Xie"
+output: html_document
+---
+
+
+```{r,echo=FALSE}
+library(ggplot2)
+library(data.table)
+library(tidyverse)
+load("../merged_data/testi.RData")
+```
+
+
+<!-- 
+   clean the NH4 data variable names and apply data.table package
+   merge two data sets and calculate trimester averages 
+-->
+Table
+```{r, table,echo=FALSE}
+t1.annuali <- testi[, mean(t1.avg, na.rm = TRUE), by = "c_year"]
+t2.annuali<- testi[, mean(t2.avg, na.rm = TRUE), by = "c_year"]
+t3.annuali <- testi[, mean(t3.avg, na.rm = TRUE), by = "c_year"]
+total.annuali<- testi[, mean(total.avg, na.rm = TRUE), by = "c_year"]
+
+annual.combined <- list(t1.annuali, t2.annuali, t3.annuali, total.annuali) %>% 
+  reduce(left_join, by = "c_year")
+
+```
+
+
+<!-- 
+   Create a table 
+-->
+
+```{r,echo=FALSE}
+annual.combined$t1 <- annual.combined$V1.x
+annual.combined$t2 <- annual.combined$V1.y
+annual.combined$t3 <- annual.combined$V1.x.x
+annual.combined$total <- annual.combined$V1.y.y
+annual.combined <- select(annual.combined, -V1.x, -V1.y, -V1.x.x, -V1.y.y)
+annual.combined.melt <- melt(annual.combined,id.vars="c_year")
+annual.combined.melt
+```
+
+<!-- 
+   create a graph  
+-->
+plot
+```{r,echo=FALSE}
+ggplot(annual.combined.melt, 
+       aes(x = c_year, y = value, color = variable)) + 
+  geom_point() + 
+  geom_line(aes(group = variable)) + 
+  scale_y_continuous(breaks = round(seq(min(annual.combined.melt$value), max(annual.combined.melt$value), by = .1), 1)) + 
+  xlab("Conception Year") + 
+  ylab("CO") +
+  ggtitle("Annual Plot of Average NH4 Exposure in GA (2006-2014)") +
+  labs(color = "Trimester") + 
+  theme_bw() 
+```
