@@ -23,6 +23,7 @@ To analyze the data, you will need to run the following command and your local c
 docker run -v ~/path/to/HW7:/HW7 hw7
 
 ```
+The final report will be locate at the "output" folder. Please check when the system finishes running. 
 
 ## Information of rules in makefile
 To get help, please run
